@@ -13,8 +13,8 @@ Antes de começar, certifique-se de ter instalado em sua máquina:
   ````
 # 📥 Clonando o repositório
   ```bash
-    git clone https://github.com/seu-usuario/seu-repositorio.git
-    cd nome-do-projeto
+    git clone https://github.com/dornelxs/tech-cursos.git
+    cd tech-cursos
   ````
 
 # 📁 Entrar na pasta do projeto recém-criado
