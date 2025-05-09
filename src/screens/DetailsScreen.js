@@ -3,12 +3,12 @@ import React from 'react'
 
 const DetailsScreen = ({ route }) => {
 
-  const { itemID, title, description } = route.params
+  const { itemID, name, description } = route.params
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>📖 Detalhes do Curso</Text>
-      <Text style={styles.itemTitle}> {title} </Text>
+      <Text style={styles.itemTitle}> {name} </Text>
       <Text style={styles.itemDescription}> {description} </Text>
       <Text style={styles.itemId}>ID: {itemID} </Text>
       
