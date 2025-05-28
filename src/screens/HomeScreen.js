@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 2,
   },
-  itemTitle: { fontSize: 18, fontWeight: "bold"},
+  itemTitle: { fontSize: 18, fontWeight: "bold" },
   itemDescription: { fontSize: 14, color: "#555" },
 });
 
