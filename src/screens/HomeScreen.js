@@ -7,15 +7,17 @@ import {
   Alert,
   Button,
 } from "react-native";
-import { React, useCallback, useState } from "react";
+import React, { useCallback, useState, useContext } from "react";
 import { deletarCurso, getCursos } from "../services/CursoService";
 import { useFocusEffect } from "@react-navigation/native";
+import { AuthContext } from "../context/AuthContext";
 
 const HomeScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
+  const { user } = useContext(AuthContext);
 
   const carregarCursos = async () => {
-    const cursos = await getCursos();
+    const cursos = await getCursos(user.uid);
     setItems(cursos);
   };
 
@@ -26,6 +28,17 @@ const HomeScreen = ({ navigation }) => {
   );
 
   const confirmarExclusao = (id) => {
+    // Para web, Alert.alert pode não funcionar como esperado.
+    // Usar window.confirm se estiver rodando na web.
+    if (typeof window !== "undefined" && window.confirm) {
+      const confirmado = window.confirm("Deseja realmente excluir este curso?");
+      if (confirmado) {
+        deletarCurso(id).then(carregarCursos);
+      }
+      return;
+    }
+
+    // Mobile padrão
     Alert.alert("Confirmar", "Deseja realmente excluir este curso?", [
       { text: "Cancelar", style: "cancel" },
       {
@@ -63,11 +76,12 @@ const HomeScreen = ({ navigation }) => {
           >
             <Text style={styles.itemTitle}>{item.name}</Text>
             <Text style={styles.itemDescription}>{item.description}</Text>
-            <Button
-              title="🗑️"
+            <TouchableOpacity
+              style={styles.deleteButton}
               onPress={() => confirmarExclusao(item.id)}
-              color="#d9534f"
-            />
+            >
+              <Text style={styles.deleteButtonText}>🗑️ Delete</Text>
+            </TouchableOpacity>
           </TouchableOpacity>
         )}
       />
@@ -87,6 +101,17 @@ const styles = StyleSheet.create({
   },
   itemTitle: { fontSize: 18, fontWeight: "bold" },
   itemDescription: { fontSize: 14, color: "#555" },
+  deleteButton: {
+    marginTop: 10,
+    backgroundColor: "#d9534f",
+    padding: 8,
+    borderRadius: 5,
+    alignSelf: "flex-start",
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
 });
 
 export default HomeScreen;

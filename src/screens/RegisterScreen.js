@@ -1,12 +1,21 @@
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Button,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
 import { auth } from "../config/firebaseConfig";
-import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Ionicons } from "@expo/vector-icons";
 
 const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleRegister = async () => {
     try {
@@ -29,18 +38,31 @@ const RegisterScreen = ({ navigation }) => {
         placeholder="Email"
         style={styles.input}
         value={email}
-        onChangeText={setEmail} 
+        onChangeText={setEmail}
       />
 
-      <TextInput
-        placeholder="Senha"
-        style={styles.input}
-        secureTextEntry
-        value={senha}
-        onChangeText={setSenha}
-      />
+      <View style={styles.inputWrapper}>
+        <TextInput
+          placeholder="Senha"
+          style={styles.input}
+          secureTextEntry={!showPassword}
+          value={senha}
+          onChangeText={setSenha}
+        />
+        <TouchableOpacity
+          onPress={() => setShowPassword((prev) => !prev)}
+          style={styles.eyeButton}
+        >
+          <Ionicons
+            name={showPassword ? "eye-off" : "eye"}
+            size={22}
+            color="#555"
+          />
+        </TouchableOpacity>
+      </View>
 
       <Button title="Cadastrar" onPress={handleRegister} />
+      <View style={{ height: 12 }} />
       <Button title="Voltar para o Login" onPress={() => navigation.goBack()} />
     </View>
   );
@@ -54,7 +76,24 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-  input: { width: "100%", borderBottomWidth: 1, marginBottom: 20, padding: 8 },
+  input: {
+    width: "100%",
+    borderBottomWidth: 1,
+    marginBottom: 0,
+    padding: 8,
+    paddingRight: 40, // espaço para o ícone
+  },
+  inputWrapper: {
+    width: "100%",
+    position: "relative",
+    marginBottom: 20,
+  },
+  eyeButton: {
+    position: "absolute",
+    right: 0,
+    top: 2,
+    padding: 8,
+  },
 });
 
 export default RegisterScreen;
